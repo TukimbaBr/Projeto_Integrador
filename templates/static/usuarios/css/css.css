@@ -1,0 +1,72 @@
+
+.fundo{
+    background-color: #F2F2F2;
+    color: #262223;
+}
+
+.bg-nav{
+    background-color: #DCF2BB;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.bg-hr{
+    background-color: #262223;
+}
+
+.container{
+    background-color: white;
+    border-radius: 10px;
+    color: #262223;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.nav-item{
+    margin-top:10px;
+    background-color: #DCF2BB;
+    color: #262223;
+    border-radius: 10px;
+       
+}
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {        # aba ativa
+    color:  white ;
+    background-color:#80BF41;
+    border-radius: 10px;
+}
+
+#linkExibicao{
+    color:  #262223 ;
+    font-weight: bold;
+}
+#linkFormulario{
+    color:  #262223 ;
+    font-weight: bold;
+}
+
+.form-control{
+    border-radius: 10px;
+    border: 1px solid #80BF41;
+}
+
+textarea {
+    resize: none;      
+}
+
+.card{
+    background-color:#DCF2BB;
+    color:#262223;
+    border-radius: 10px;
+}
+
+/* para editar espaço da foto */
+img.card-img-top{
+    border-radius: 10px;
+    height:180px;
+}
+
+#btn-filtro{
+    
+}
+
+

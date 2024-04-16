@@ -1,0 +1,50 @@
+{% extends "base_login.html" %}
+{%load static %}
+
+{% block 'body'%}
+    <div class="container" id="#box-login">
+        
+        <form action="{% url 'login' %}"method="POST"> {% csrf_token %}
+            <br>
+            <h1 id="login-title">Login</h1>
+            <br>
+            
+            <label>E-mail</label>
+            <input type="e-mail" placeholder="Digite seu E-mail..." name="email" class="form-control">
+            <br>
+            <label>Senha</label>
+            <input type="password" placeholder="Digite sua senha..." name="senha" class="form-control">
+            <br>
+            <input type="submit" class= "btn btn-success"></input>
+            
+            <br><br>
+            
+
+        
+    </div>
+
+<style>
+    @font-face{
+        font-family:'Samurai';
+        src: url({% static 'fonts/The Last Shuriken.otf' %}) format('opentype'),
+        url({% static 'fonts/The Last Shuriken.ttf' %}) format('truetype');
+        font-weight: normal;
+        font-style:normal;
+    }
+
+    @font-face{
+        font-family:'Karate';
+        src: url({% static 'fonts/Karate.ttf' %}) format('truetype');
+        font-weight: normal;
+        font-style:normal;
+    }
+    
+    #login-title{
+        font-family:'Karate';
+        text-align:center;
+        
+    }
+</style>
+    
+
+{% endblock %}

@@ -1,0 +1,351 @@
+{% extends 'base.html' %}
+{% load filters %}
+
+{% block 'dashboard' %}
+<div class = "container">
+    {% if messages %}
+            <br>
+            {%for message in messages%}
+                <div class="alert {{message.tags}}">{{message}}</div>
+            {%endfor%}
+    {% endif %}
+            <br><br>
+            <ul class="nav nav-pills nav-fill justify-content-around" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#tab-consultas" id="link-consultas" data-toggle="tab" role="tab" aria-controls="tab-consultas">Cadastro</a>
+                </li>
+                <li>
+                    <a class="nav-link" aria-current="page" href="#tab-cadastros" id="link-cadastros" data-toggle="tab" role="tab" aria-controls="tab-cadatros">Consultas</a>
+                </li>
+                <li>
+                    <a class="nav-link" aria-current="page" href="#tab-fichas" id="link-fichas" data-toggle="tab" role="tab" aria-controls="tab-fichas">Fichas</a>
+                </li>    
+            </ul>
+            <div class="tab-content" id="meus-conteudos">
+                <div class="tab-pane fade show active" id="tab-consultas" role="tabpanel" aria-labelledyby="">
+                    
+                    <form action="{% url 'add_paciente'%}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+        
+                        <div class="form-group">
+                            <label>Foto:</label>
+                            <input class="form-control" type="file" name="fotos" multiple>
+                        </div>
+        
+                        <div class="form-group">
+                            <label>Nome:</label>
+                            <input class="form-control" type="text" name="nome">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>CPF:</label>
+                                <input class="form-control" type="text" name="cpf">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>RG:</label>
+                                <input class="form-control" type="text" name="rg">
+                            </div>
+                        </div>
+        
+                        <div class="form-row">
+                            <div class="form-group col-md-2">
+                                <label>Sexo:</label>
+                                <select class="form-control" name="sexo">
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Feminino">Feminino</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Estado Civil:</label>
+                                <input class="form-control" type="text" name="estado_civil">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Setor:</label>
+                                <input class="form-control" type="text" name="setor">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Vínculo:</label>
+                                <input class="form-control" type="text" name="vinculo">
+                            </div>
+                        </div>
+        
+                        <div class="form-row">
+                            <div class="form-group col-md-2">
+                                <label>Data de Nascimento:</label>
+                                <input class="form-control" type="date" name="data_nasc">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Data de Admissão:</label>
+                                <input class="form-control" type="date" name="data_admissao">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Raça:</label>
+                                <input class="form-control" type="text" name="raca">
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label>Religião:</label>
+                                <input class="form-control" type="text" name="religiao">
+                            </div>
+                        </div>
+        
+                            <div class="form-row">
+                                <div class="form-group col-md-3">
+                                    <label>Plano de Saúde:</label>
+                                    <input class="form-control" type="text" name="plano_saude">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Cartão SUS:</label>
+                                    <input class="form-control" type="text" name="cartao_sus">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Profissão:</label>
+                                    <input class="form-control" type="text" name="profissao">
+                                </div>
+                            </div>
+        
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label>Naturalidade:</label>
+                                <input class="form-control" type="text" name="naturalidade">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Estado:</label>
+                                <select class="form-control" name="estado_idoso">
+                                    {% for sigla, nome in estado_choices %}
+                                        <option value="{{ sigla }}">{{ nome }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Cidade:</label>
+                                <input class="form-control" type="text" name="cidade_idoso">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>CEP:</label>
+                                <input class="form-control" type="text" name="cep_endereco_idoso">
+                            </div>
+                        </div>
+        
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label>Bairro:</label>
+                                <input class="form-control" type="text" name="bairro_endereco_idoso">
+                            </div>
+                            <div class="form-group col-md-7">
+                                <label>Rua:</label>
+                                <input class="form-control" type="text" name="rua_endereco_idoso">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label>Número:</label>
+                                <input class="form-control" type="text" name="numero_endereco_idoso">
+                            </div>
+                        </div>
+        
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>Complemento:</label>
+                                <input class="form-control" type="text" name="complemento_endereco_idoso" placeholder="Ex: nº apartamento, logradouro, ponto de referência">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>E-mail:</label>
+                                <input class="form-control" type="email" name="email_idoso">
+                            </div>
+                        </div>
+        
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label>Celular:</label>
+                                <input class="form-control" type="text" name="celular_idoso">
+                            </div>
+                            <div class="form-group col-md-4">        
+                                <label>Outro Celular:</label>
+                                <input class="form-control" type="text" name="celular_outro_idoso">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Telefone Residencial:</label>
+                                <input class="form-control" type="text" name="tell_residencial_idoso">
+                            </div>
+                        </div>
+        
+        
+                
+                        <label>História Pregressa:</label>
+                        <textarea class="form-control" name="historia_pregressa_idoso"></textarea>
+                        <br><br>
+                
+                        <input class="btn btn-success" type="submit" value="Enviar">
+                    </form>
+
+
+                </div>
+
+                <div class="tab-pane fade " id="tab-cadastros" role="tabpanel" aria-labelledyby="">
+                    
+
+
+                </div>
+
+                
+
+                <div class="tab-pane fade " id="tab-fichas" role="tabpanel" aria-labelledyby="">
+                    <div class="listar_idosos">
+                
+                        <div class="row row-cols-1 row-cols-md-3 g-4">
+                            {%for idoso in page_obj.object_list%}
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        {%if idoso|get_first_image %}                        
+                                            <img class="card-img-top" src="{{idoso|get_first_image}}" alt="Card image cap">
+                                        {%endif%}
+                                        <div class="card-body">
+                                            <h6 class="card-title">{{idoso.nome_idoso}}</h6>
+                                            <p class="card-text"><small class="text-muted">Ultima atualização realizada na data 00-99-00 pelo usuário *testeusuaruio*</small></p>
+                                            <a href="{%url 'idoso' idoso.slug %}" class="btn btn-primary">Ver</a>
+                                        </div>
+                                    </div>
+                                    </div>
+                            {%endfor%}
+                    </div>
+                    <br><br>
+                    
+                    <div class="row text-center">
+                        <div class="col-lg-12">
+                            <ul class="pagination justify-content-end">
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&laquo;</a>
+                                    </li>
+                                {% endif %}
+                        
+                                {% for pg in page_obj.paginator.page_range %}
+                                    <!-- Sempre mostra as 3 primeiras e 3 últimas páginas -->
+                                    {% if pg == 1 or pg == 2 or pg == 3 or pg == page_obj.paginator.num_pages or pg == page_obj.paginator.num_pages|add:'-1' or pg == page_obj.paginator.num_pages|add:'-2' %}
+                        
+                                        {% if page_obj.number == pg %}
+                                            <li class="page-item active">
+                                                <a class="page-link" href="?page={{ pg }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ pg }}</a>
+                                            </li>
+                                        {% else %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ pg }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ pg }}</a>
+                                            </li>
+                                        {% endif %}
+                            
+                                        {% else %}
+                            
+                                        {% if page_obj.number == pg %}
+                                            <li class="page-item active">
+                                                <a class="page-link" href="?page={{ pg }}">{{ pg }}</a>
+                                            </li>
+                                        {% elif pg > page_obj.number|add:'-4' and pg < page_obj.number|add:'4' %}
+                                            <!-- Mostra 3 páginas antes e 3 páginas depois da atual -->
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ pg }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ pg }}</a>
+                                            </li>
+                                        {% elif pg == page_obj.number|add:'-4' or pg == page_obj.number|add:'4' %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="">...</a>
+                                            </li>
+                                        {% endif %}
+                        
+                                    {% endif %}
+                                {% endfor %}
+                        
+                                {% if page_obj.has_next %}
+                                    <li><a class="page-link" href="?page={{ page_obj.next_page_number }}&q={{ request.GET.q }}">&raquo;</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+
+
+            <br><br>
+
+        
+            <br><hr><br>
+
+
+            
+
+    
+</div>
+    <style>
+        .fundo{
+            background-color: #F2F2F2;
+            color: #262223;
+        }
+        
+        .bg-nav{
+            background-color: #DCF2BB;
+            border-radius: 5px;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        }
+        
+        .bg-hr{
+            background-color: #262223;
+        }
+        
+        
+        .container{
+            background-color: white;
+            border-radius: 10px;
+            color: #262223;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        }
+        
+        .nav-item{
+            margin-top:10px;
+            background-color: #DCF2BB;
+            color: #262223;
+            border-radius: 10px;
+               
+        }
+        
+        .nav-pills .nav-link.active, .nav-pills .show>.nav-link {        # aba ativa
+            color:  white ;
+            background-color:#80BF41;
+            border-radius: 10px;
+        }
+        
+        #linkExibicao{
+            color:  #262223 ;
+            font-weight: bold;
+        }
+        #linkFormulario{
+            color:  #262223 ;
+            font-weight: bold;
+        }
+        
+        .form-control{
+            border-radius: 10px;
+            border: 1px solid #80BF41;
+        }
+        
+        textarea {
+            resize: none;      
+        }
+        
+        .card{
+            background-color:#DCF2BB;
+            color:#262223;
+            border-radius: 10px;
+        }
+        
+        /* para editar espaço da foto */
+        img.card-img-top{
+            border-radius: 10px;
+            height:180px;
+        }
+        
+        #btn-filtro{
+            
+        }
+        
+        
+    </style>
+{%endblock%}
