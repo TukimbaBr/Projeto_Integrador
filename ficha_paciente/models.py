@@ -68,8 +68,15 @@ class Idoso(models.Model):
         return self.nome_idoso
     
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.id_idoso)
+        if self.nome_idoso:
+            slug_candidate = slugify(self.nome_idoso)
+            counter = 1
+            while Idoso.objects.filter(slug=slug_candidate).exists():
+                slug_candidate = f"{slugify(self.nome_idoso)}-{counter}"
+                counter += 1
+            self.slug = slug_candidate
+        else:
+            self.slug = None
         
         return super().save(*args, **kwargs)
 

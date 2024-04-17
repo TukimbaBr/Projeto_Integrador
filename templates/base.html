@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="{% static 'general/css/base.css' %}">
     <link rel="stylesheet" href="{% static 'general/css/general.css' %}">    
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    
     {% block 'head' %}{% endblock %}
 
     <title>{% block 'title' %}{% endblock %}</title>
@@ -52,13 +56,20 @@
           <span class="tooltip">Agenda</span>
         </li>
         <li>
-          <a href="{% url 'cadastrar_funcionarios'%}">
+          <a href="{% url 'cadastrar_funcionarios' %}">
             <i class='bx bx-cog' ></i>
             <span class="links_name">Histórico</span>
           </a>
-          <span class="tooltip">Histórico</span>
+            <span class="tooltip">Histórico</span>
         </li>
-        </ul>
+        <li>
+          
+          <a href="{% url 'sair' %}" class="btn btn-info btn-lg">            
+            <span class=" glyphicon glyphicon-log-out"></span>
+          </a>
+          <span class="tooltip">Sair</span>
+        </li>
+      </ul>
       </div>
       
       <section class="home-section">
@@ -78,6 +89,12 @@
   </body>
 </html>
 <style>
+
+
+  .glyphicon {
+    line-height: 1.5 !important;
+}
+
   .bx-logo {
     background-image: url("{% static 'usuarios/img/btn-logo.png'%}");
     font-weight: normal;
@@ -107,4 +124,7 @@
   
   font-family:'Samurai';
 }
+
+
+
 </style>

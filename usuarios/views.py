@@ -55,7 +55,7 @@ def login(request):
             return HttpResponse('Usuário inválido')
         
         auth.login(request, user)
-        return redirect(reverse('add_paciente'))
+        return redirect(reverse('plataforma'))
     
 def logout(request):
     request.session.flush()

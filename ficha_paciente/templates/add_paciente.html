@@ -9,20 +9,19 @@
                 <div class="alert {{message.tags}}">{{message}}</div>
             {%endfor%}
     {% endif %}
-            <br><br>
-            <ul class="nav nav-pills nav-fill justify-content-around" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#tab-consultas" id="link-consultas" data-toggle="tab" role="tab" aria-controls="tab-consultas">Cadastro</a>
+            <br>
+            <!-- Abas da tela pacientes-->
+            <ul class="nav nav-pills nav-fill" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a href="#tabFormulario" class="nav-link active" id="linkFormulario" data-toggle="tab" role="tab" aria-controls="tabFormulario">Cadastro</a>
+                </li> 
+                <li class="nav-item" role="presentation">
+                    <a href="#tabExibicao" class="nav-link" id="linkExibicao" data-toggle="tab" role="tab" aria-controls="tabExibicao">Ficha dos Pacientes</a>
                 </li>
-                <li>
-                    <a class="nav-link" aria-current="page" href="#tab-cadastros" id="link-cadastros" data-toggle="tab" role="tab" aria-controls="tab-cadatros">Consultas</a>
-                </li>
-                <li>
-                    <a class="nav-link" aria-current="page" href="#tab-fichas" id="link-fichas" data-toggle="tab" role="tab" aria-controls="tab-fichas">Fichas</a>
-                </li>    
             </ul>
+            <!-- Conteúdo da tela pacientes-->
             <div class="tab-content" id="meus-conteudos">
-                <div class="tab-pane fade show active" id="tab-consultas" role="tabpanel" aria-labelledyby="">
+                <div class="tab-pane fade show active" id="tabFormulario" role="tabpanel" aria-labelledby="linkFormulario">
                     
                     <form action="{% url 'add_paciente'%}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
@@ -179,18 +178,54 @@
 
 
                 </div>
-
-                <div class="tab-pane fade " id="tab-cadastros" role="tabpanel" aria-labelledyby="">
-                    
-
-
-                </div>
-
                 
+                <br>
+                <div class="tab-pane fade" id="tabExibicao" role="tabpanel" aria-labelledby="linkExibicao">
 
-                <div class="tab-pane fade " id="tab-fichas" role="tabpanel" aria-labelledyby="">
+                    <!--Filtros de Pesquisa-->
+                    <form action="{% url 'add_paciente' %}" method="GET">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Nome:</label>
+                                <input class="form-control" type="text" name="nome" placeholder="Nome...">
+                            </div>
+
+                            <div class = "col-md-2">
+                                <label>Data de Admissão:</label>
+                                <input class="form-control" type="date" name="data_admissao">
+                            </div>
+                
+                            <div class="col-md-2">
+                                <label>Sexo:</label>
+                                <select class="form-control" name="sexo">
+                                    <option value="">---</option>
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Feminino">Feminino</option>
+                                </select>
+                            </div>
+                
+                            <div class="col-md-2">
+                                <label>Plano de Saúde:</label>
+                                <input class="form-control" type="text" name="plano_saude">
+                            </div>
+
+                            <div class="col-md-2">
+                                <label>Setor:</label>
+                                <input class="form-control" type="text" name="setor">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md">
+                                <input id="btn-filtro" style="margin-top:8px" type="submit" value="Filtrar"  class="btn btn-success">
+                                <br>                
+                            </div>                    
+                        </div>                
+                    </form>
+
+                    <!--Cars Dos Pacientes-->
                     <div class="listar_idosos">
-                
+                        <br>
                         <div class="row row-cols-1 row-cols-md-3 g-4">
                             {%for idoso in page_obj.object_list%}
                                 <div class="col-md-3">
@@ -201,7 +236,7 @@
                                         <div class="card-body">
                                             <h6 class="card-title">{{idoso.nome_idoso}}</h6>
                                             <p class="card-text"><small class="text-muted">Ultima atualização realizada na data 00-99-00 pelo usuário *testeusuaruio*</small></p>
-                                            <a href="{%url 'idoso' idoso.slug %}" class="btn btn-primary">Ver</a>
+                                            <a href="{%url 'idoso' idoso.slug %}" class="btn btn-success">Ver</a>
                                         </div>
                                     </div>
                                     </div>
