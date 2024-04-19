@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'usuarios',
     'rolepermissions',
-    'ficha_paciente'
+    'ficha_paciente',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

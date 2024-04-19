@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .forms import IdosoForm
+from .forms import IdosoForm, FotoForm
 from .models import  estado_choices, Idoso, Foto
 from django.http import HttpResponse
 from PIL import Image, ImageDraw
@@ -133,7 +133,28 @@ def add_paciente(request):
         return redirect(reverse('add_paciente'))
 
 def idoso(request, slug):
-    if request.method == "GET":
-        idoso = Idoso.objects.get(slug=slug)
-        form = IdosoForm(initial=idoso.__dict__)
-    return render(request, 'idosos.html', {'form':form})
+    idoso = Idoso.objects.get(slug=slug)
+    
+    # Corrigido: Obtendo a foto associada ao idoso
+    foto = Foto.objects.filter(idoso=idoso).first()
+    
+    if request.method == "POST":
+        form = IdosoForm(request.POST, instance=idoso)
+        # Corrigido: Passando a foto associada ao idoso para o FotoForm
+        form_ft = FotoForm(request.POST, request.FILES, instance=foto)
+        if form.is_valid() and form_ft.is_valid():
+            form.save()
+            form_ft.save()
+            messages.success(request, 'Detalhes do idoso atualizados com sucesso!')
+            return redirect(reverse('add_paciente'))
+    else:
+        form = IdosoForm(instance=idoso)
+        # Corrigido: Passando a foto associada ao idoso para o FotoForm
+        form_ft = FotoForm(instance=foto)
+        
+    return render(request, 'idosos.html', {'form': form, 'form_ft': form_ft, 'idoso': idoso})
+
+
+
+
+
