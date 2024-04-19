@@ -25,15 +25,29 @@
                     
                     <form action="{% url 'add_paciente'%}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
-        
-                        <div class="form-group">
-                            <label>Foto:</label>
-                            <input class="form-control" type="file" name="fotos" multiple>
+                        <br>
+
+                        <div class="form-row">
+                            
+                            <div class=" form-group col-md-3">
+                                <label>Foto:</label>
+                                <label class="picture" for="picture__input" tabIndex="0">
+                                    <span class="picture__image"></span>
+                                </label>
+                                <input class="form-control" type="file" name="fotos" id= "picture__input" multiple >
+                            </div>
+                            <div class="form-group col-md-9"> 
+                                <label>História Pregressa:</label>
+                                <textarea class="form-control" name="historia_pregressa_idoso" ></textarea>
+                            </div>
                         </div>
-        
-                        <div class="form-group">
-                            <label>Nome:</label>
-                            <input class="form-control" type="text" name="nome">
+                        <br>
+                        
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>Nome:</label>
+                                <input class="form-control" type="text" name="nome">
+                            </div>
                         </div>
                         
                         <div class="form-row">
@@ -165,15 +179,10 @@
                                 <label>Telefone Residencial:</label>
                                 <input class="form-control" type="text" name="tell_residencial_idoso">
                             </div>
-                        </div>
-        
-        
-                
-                        <label>História Pregressa:</label>
-                        <textarea class="form-control" name="historia_pregressa_idoso"></textarea>
+                        </div>                                  
                         <br><br>
-                
                         <input class="btn btn-success" type="submit" value="Enviar">
+                        <br>
                     </form>
 
 
@@ -310,6 +319,7 @@
     
 </div>
     <style>
+        
         .fundo{
             background-color: #F2F2F2;
             color: #262223;
@@ -347,6 +357,7 @@
             border-radius: 10px;
         }
         
+        /* abas e formulario*/
         #linkExibicao{
             color:  #262223 ;
             font-weight: bold;
@@ -362,9 +373,11 @@
         }
         
         textarea {
-            resize: none;      
+            resize: none;
+            height:100% !important;      
         }
         
+        /* cards */
         .card{
             background-color:#DCF2BB;
             color:#262223;
@@ -377,10 +390,80 @@
             height:180px;
         }
         
-        #btn-filtro{
+        /* botão de foto */
+        #picture__input {
+            display: none;
+          }
+          
+          .picture {
+            height:100%;
+            aspect-ratio: 16/9;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            border: 2px dashed #80BF41;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: sans-serif;
+            transition: color 300ms ease-in-out, background 300ms ease-in-out;
+            outline: none;
+            overflow: hidden;
+          }
+          
+          .picture:hover {
+            color: #80BF41;
+            background: #ddd;
+          }
+          
+          .picture:active {
+            border-color: turquoise;
+            color: turquoise;
+            background: #eee;
+          }
+          
+          .picture:focus {
+            color: #777;
+            background: #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+          }
+          
+          .picture__img {
+            max-width: 100%;
             
-        }
-        
+          }
+          
+
         
     </style>
+    <script>
+    const inputFile = document.querySelector("#picture__input");
+    const pictureImage = document.querySelector(".picture__image");
+    const pictureImageTxt = "Foto ";
+    pictureImage.innerHTML = pictureImageTxt;
+
+    inputFile.addEventListener("change", function (e) {
+        const inputTarget = e.target;
+        const file = inputTarget.files[0];
+        if (file) {
+            const reader = new FileReader();
+        
+            reader.addEventListener("load", function (e) {
+              const readerTarget = e.target;
+        
+              const img = document.createElement("img");
+              img.src = readerTarget.result;
+              img.classList.add("picture__img");
+        
+              pictureImage.innerHTML = "";
+              pictureImage.appendChild(img);
+            });
+        
+            reader.readAsDataURL(file);
+            } else {
+            pictureImage.innerHTML = pictureImageTxt;
+          }
+        });
+    </script>
 {%endblock%}
