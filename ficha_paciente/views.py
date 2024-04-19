@@ -115,7 +115,7 @@ def add_paciente(request):
             name = f'{date.today()}_{velho.id_idoso}_{velho.nome_idoso}.jpg'
             img = Image.open(f)
             img = img.convert('RGB')
-            img = img.resize((300,300))
+            img = img.resize((160,160))
             draw = ImageDraw.Draw(img)
             draw.text((20,280), f"Lar Acolhedor Sào Vicente de São Paulo {date.today()}", (255, 255, 0))
             output = BytesIO()
@@ -135,21 +135,38 @@ def add_paciente(request):
 def idoso(request, slug):
     idoso = Idoso.objects.get(slug=slug)
     
-    # Corrigido: Obtendo a foto associada ao idoso
+    # Obtendo a foto associada ao idoso
     foto = Foto.objects.filter(idoso=idoso).first()
     
     if request.method == "POST":
         form = IdosoForm(request.POST, instance=idoso)
-        # Corrigido: Passando a foto associada ao idoso para o FotoForm
         form_ft = FotoForm(request.POST, request.FILES, instance=foto)
         if form.is_valid() and form_ft.is_valid():
             form.save()
+            
+            # Aplicando manipulações na imagem antes de salvar
+            if 'foto' in request.FILES:  # Verifica se uma nova imagem foi enviada
+                f = request.FILES['foto']
+                name = f'{date.today()}_{idoso.id_idoso}_{idoso.nome_idoso}.jpg'
+                img = Image.open(f)
+                img = img.convert('RGB')
+                img = img.resize((160,160))
+                draw = ImageDraw.Draw(img)
+                draw.text((20,280), f"Lar Acolhedor Sào Vicente de São Paulo {date.today()}", (255, 255, 0))
+                output = BytesIO()
+                img.save(output, format="JPEG", quality=100)
+                output.seek(0)
+                img_final = InMemoryUploadedFile(output, 'ImageField', name, 'image/jpeg', sys.getsizeof(output), None)
+                
+                # Atualizando a foto associada ao idoso
+                foto.foto = img_final
+                foto.save()
+                
             form_ft.save()
             messages.success(request, 'Detalhes do idoso atualizados com sucesso!')
             return redirect(reverse('add_paciente'))
     else:
         form = IdosoForm(instance=idoso)
-        # Corrigido: Passando a foto associada ao idoso para o FotoForm
         form_ft = FotoForm(instance=foto)
         
     return render(request, 'idosos.html', {'form': form, 'form_ft': form_ft, 'idoso': idoso})

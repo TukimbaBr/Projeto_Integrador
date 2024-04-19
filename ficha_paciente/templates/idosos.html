@@ -1,5 +1,6 @@
 {%load static%}
 
+
 <head>
     <link rel="stylesheet" type="text/css" href="{%static 'usuarios/css/css.css'%}">
     
@@ -19,8 +20,9 @@
 <h1>Idosos</h1>
 
 <div class="container">
-    <form method="post" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data">
         <img src="{{ form_ft.instance.foto.url }}" alt="Foto do Idoso">
+        {{form_ft}}
         {% csrf_token %}
         {{ form }}
         
