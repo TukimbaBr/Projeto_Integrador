@@ -15,17 +15,16 @@ from django.core.paginator import Paginator
 
 @has_permission_decorator('cadastrar_paciente')
 def add_paciente(request):
+    tab_exibicao = False
+    idosos = Idoso.objects.all()
+
     if request.method == "GET":
         nome = request.GET.get('nome')
         data_admissao = request.GET.get('data_admissao')
         sexo = request.GET.get('sexo')
         plano_saude = request.GET.get('plano_saude')
         setor = request.GET.get('setor')
-        idosos = Idoso.objects.all()
 
-        add_paciente_paginator = Paginator(idosos, 4)
-        page_num = request.GET.get('page')
-        page_obj = add_paciente_paginator.get_page(page_num)
 
         if nome or data_admissao or sexo or plano_saude or setor:
 
@@ -36,18 +35,22 @@ def add_paciente(request):
                idosos =  idosos.filter(sexo_idoso=sexo)
             
             if plano_saude:
-               idosos =  idosos.filter(plano_saude=plano_saude)
+                idosos = idosos.filter(plano_saude_idoso=plano_saude)
+
 
             if setor:
                idosos =  idosos.filter(setor_idoso=setor)
             
             if data_admissao:
                 idosos = idosos.filter(data_adimissao_idoso__gte=data_admissao)
-            
-            
-
         
-        return render(request, 'add_paciente.html', {'estado_choices': estado_choices, 'page_obj': page_obj})
+                #inicio do paginator
+        add_paciente_paginator = Paginator(idosos, 4)
+        page_num = request.GET.get('page')
+        page_obj = add_paciente_paginator.get_page(page_num)
+        
+        return render(request, 'add_paciente.html', {'estado_choices': estado_choices, 'tab_exibicao': tab_exibicao, 'page_obj': page_obj})
+    
     elif request.method == "POST":
         nome = request.POST.get('nome')
         data_nasc = request.POST.get('data_nasc')
