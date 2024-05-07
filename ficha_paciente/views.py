@@ -15,7 +15,7 @@ from django.core.paginator import Paginator
 
 @has_permission_decorator('cadastrar_paciente')
 def add_paciente(request):
-    tab_exibicao = False
+    tab_exibicao = True
     idosos = Idoso.objects.all()
 
     if request.method == "GET":

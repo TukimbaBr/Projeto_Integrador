@@ -2,15 +2,25 @@
 {% load  static  %}
 
 {% block 'dashboard'%}
+<div class="container-fluid">
 <img class="img-fluid" alt="Responsive image"src = "{%static 'usuarios/img/capa-plataforma.jpg'%}">
+</div>
 
 
 <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    }
+
 img {
     width:100vw;
     height: 100vw;
     image-size:cover;
-    margin-botton: none;
+    margin: 0;
+    padding: 0;
 }
 footer{
     background-color:#23503d;
