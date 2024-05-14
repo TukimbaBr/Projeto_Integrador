@@ -35,11 +35,12 @@
 
                         <div class="form-row">
                             
-                            <div class=" form-group col-md-3">
+                            <div class=" form-group col-md-3" style="height:200px">
                                 <label>Foto:</label>
                                 <label class="picture" for="picture__input" tabIndex="0">
                                     <span class="picture__image"></span>
                                 </label>
+
                                 <input class="form-control" type="file" name="fotos" id= "picture__input" multiple >
                             </div>
                             <div class="form-group col-md-9"> 
@@ -50,7 +51,7 @@
                         <br>
                         
                         <div class="form-row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-12">
                                 <label>Nome:</label>
                                 <input class="form-control" type="text" name="nome">
                             </div>
@@ -402,7 +403,7 @@
           
           .picture {
             height:100%;
-            aspect-ratio: 16/9;
+            width:100%;
             background: white;
             display: flex;
             align-items: center;

@@ -1,6 +1,7 @@
+{% extends 'base.html' %}
 {%load static%}
 
-
+{% block 'dashboard' %}
 <head>
     <link rel="stylesheet" type="text/css" href="{%static 'usuarios/css/css.css'%}">
     
@@ -20,12 +21,488 @@
 <h1>Idosos</h1>
 
 <div class="container">
-    <form method="POST" enctype="multipart/form-data">
-        <img src="{{ form_ft.instance.foto.url }}" alt="Foto do Idoso">
-        {{form_ft}}
+    <form id="myForm" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form }}
+        <br>
+        <div class="row">
+                        
+            <div class="col-md-12 text-right">
+                <button type="button" id="editButton" class="btn btn-primary" onclick="toggleEdit()">Editar</button>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class=" form-group col-md-3">
+                <label>Foto:</label>
+                <label class="picture" for="picture__input" tabIndex="0">                    
+                    <img class="picture__image" src="{{ form_ft.instance.foto.url }}" alt="Foto do Idoso">
+                    <div style="display:none">
+                        {{form_ft}}
+                    </div>
+                </label>
+                
+            </div>
+            <div class="form-group col-md-9" >
+                <label>História Pregressa:</label><br>
+                {{ form.historia_pregressa_idoso }}
+            </div>
+        </div>
+        <br>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Nome:</label>
+                {{ form.nome_idoso }}
+            </div>
+        </div>
         
-        <button type="submit" class="btn btn-success">Alterar</button>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>CPF:</label>
+                {{ form.cpf_idoso }}
+            </div>
+            <div class="form-group col-md-6">
+                <label>RG:</label>
+                {{ form.rg_idoso }}
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label>Sexo:</label>
+                {{ form.sexo_idoso }}
+            </div>
+            <div class="form-group col-md-2">
+                <label>Estado Civil:</label>
+                {{ form.estado_civil_idoso }}
+            </div>
+            <div class="form-group col-md-4">
+                <label>Setor:</label>
+                {{ form.setor_idoso }}
+            </div>
+            <div class="form-group col-md-4">
+                <label>Vínculo:</label>
+                {{ form.vinculo_idoso }}
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label>Data de Nascimento:</label>
+                {{ form.data_nasc_idoso }}
+            </div>
+            <div class="form-group col-md-2">
+                <label>Data de Admissão:</label>
+                {{ form.data_adimissao_idoso }}
+            </div>
+            <div class="form-group col-md-3">
+                <label>Raça:</label>
+                {{ form.raca_idoso }}
+            </div>
+            <div class="form-group col-md-5">
+                <label>Religião:</label>
+                {{ form.religiao_idoso }}
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label>Plano de Saúde:</label>
+                {{ form.plano_saude_idoso }}
+            </div>
+            <div class="form-group col-md-3">
+                <label>Cartão SUS:</label>
+                {{ form.cartao_sus_idoso }}
+            </div>
+            <div class="form-group col-md-6">
+                <label>Profissão:</label>
+                {{ form.profissao_idoso }}
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label>Naturalidade:</label>
+                {{ form.naturalidade_idoso }}
+            </div>
+            <div class="form-group col-md-3">
+                <label>Estado:</label>
+                {{ form.estado_idoso }}
+            </div>
+            <div class="form-group col-md-4">
+                <label>Cidade:</label>
+                {{ form.cidade_idoso }}
+            </div>
+            <div class="form-group col-md-2">
+                <label>CEP:</label>
+                {{ form.cep_endereco_idoso }}
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label>Bairro:</label>
+                {{ form.bairro_endereco_idoso }}
+            </div>
+            <div class="form-group col-md-7">
+                <label>Rua:</label>
+                {{ form.rua_endereco_idoso }}
+            </div>
+            <div class="form-group col-md-1">
+                <label>Número:</label>
+                {{ form.numero_endereco_idoso }}
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Complemento:</label>
+                {{ form.complemento_endereco_idoso }}
+            </div>
+            <div class="form-group col-md-6">
+                <label>E-mail:</label>
+                {{ form.email_idoso }}
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label>Celular:</label>
+                {{ form.celular_idoso }}
+            </div>
+            <div class="form-group col-md-4">
+                <label>Outro Celular:</label>
+                {{ form.celular_outro_idoso }}
+            </div>
+            <div class="form-group col-md-4">
+                <label>Telefone Residencial:</label>
+                {{ form.tell_residencial_idoso }}
+            </div>
+        </div>
+        
+        <!-- Botão de enviar -->
+        <input class="btn btn-success" type="submit" value="Salvar">
+        
     </form>
 </div>
+
+<script>
+    window.addEventListener("load", function() {
+        lockFields(); // Chama a função para travar os campos assim que a página é carregada
+        loadFilterValues(); // Carrega os valores dos filtros se estiverem armazenados
+    });
+
+    // Função para travar os campos por padrão
+    function lockFields() {
+        var form = document.getElementById("myForm");
+        var inputs = form.querySelectorAll("input, select, textarea");
+    
+        // Travando inputs de texto, select boxes, textareas e input file
+        inputs.forEach(function(input) {
+            // Verifica o tipo de elemento
+            var inputType = input.tagName.toLowerCase();
+            if (inputType === "input") {
+                var inputFieldType = input.getAttribute("type");
+                if (inputFieldType === "text" || inputFieldType === "file") {
+                    input.setAttribute("readonly", true);
+                }
+            } else if (inputType === "select" || inputType === "textarea") {
+                input.setAttribute("readonly", true);
+            }
+        });
+    }
+    
+
+    // Função para carregar os valores dos filtros
+    function loadFilterValues() {
+        document.getElementById("nomeInput").value = localStorage.getItem("nomeFiltro") || "";
+        document.getElementById("dataAdmissaoInput").value = localStorage.getItem("dataAdmissaoFiltro") || "";
+        document.getElementById("sexoInput").value = localStorage.getItem("sexoFiltro") || "";
+        document.getElementById("planoSaudeInput").value = localStorage.getItem("planoSaudeFiltro") || "";
+        document.getElementById("setorInput").value = localStorage.getItem("setorFiltro") || "";
+    }
+
+    // Função para alternar entre os modos de edição e cancelamento
+    function toggleEdit() {
+        var editButton = document.getElementById("editButton");
+        if (editButton.innerText === "Editar") {
+            // Se o texto do botão for "Editar", mudar para "Cancelar" e a cor para vermelho
+            editButton.innerText = "Cancelar";
+            editButton.classList.remove("btn-primary");
+            editButton.classList.add("btn-danger");
+        } else {
+            // Se o texto do botão for "Cancelar", mudar para "Editar" e a cor para azul
+            editButton.innerText = "Editar";
+            editButton.classList.remove("btn-danger");
+            editButton.classList.add("btn-primary");
+        }
+    }
+
+    // Função para verificar a senha antes de permitir a edição
+    function verificarSenha() {
+        var senhaCorreta = gerarSenha(); // Obter a senha correta do dia
+        var senhaInserida = prompt("Por favor, insira a senha para editar o documento:");
+
+        if (senhaInserida === senhaCorreta) {
+            // Senha correta, permitir edição dos campos
+            var form = document.getElementById("myForm");
+            var fields = form.getElementsByTagName("input");
+            for (var i = 0; i < fields.length; i++) {
+                fields[i].removeAttribute("readonly");
+            }
+            // Remover o atributo readonly dos textareas
+            var textAreas = form.getElementsByTagName("textarea");
+            for (var j = 0; j < textAreas.length; j++) {
+                textAreas[j].removeAttribute("readonly");
+            }
+            // Remover o atributo disabled dos input file
+            var fileInputs = form.querySelectorAll("input[type='file']");
+            for (var k = 0; k < fileInputs.length; k++) {
+                fileInputs[k].removeAttribute("disabled");
+            }
+            document.getElementById("editButton").disabled = true;
+        } else {
+            // Senha incorreta, exibir mensagem de erro
+            alert("Senha incorreta! Por favor, tente novamente.");
+        }
+    }
+
+    // Função para gerar a senha do dia
+    function gerarSenha() {
+        var dataAtual = new Date();
+        var dia = dataAtual.getDate().toString().padStart(2, '0'); // Obter o dia com 2 dígitos
+        var mes = (dataAtual.getMonth() + 1).toString().padStart(2, '0'); // Obter o mês com 2 dígitos
+        return "lasp" + dia + mes;
+    }
+
+    // Adicione um evento de clique ao botão de edição
+    document.getElementById("editButton").addEventListener("click", function() {
+        var confirmEdit = confirm("Você está prestes a editar este documento. Deseja continuar?");
+        if (confirmEdit) {
+            verificarSenha(); // Verificar a senha antes de permitir a edição
+        }
+    });
+
+    document.getElementById("saveButton").addEventListener("click", function(event) {
+        event.preventDefault();
+        var confirmSubmit = confirm("Tem certeza que deseja enviar os dados?");
+        if (confirmSubmit) {
+            document.getElementById("myForm").submit();
+        } else {
+            return false;
+        }
+    });
+</script>
+
+<style>
+        
+        .fundo{
+            background-color: #F2F2F2;
+            color: #262223;
+        }
+        
+        .bg-nav{
+            background-color: #DCF2BB;
+            border-radius: 5px;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        }
+        
+        .bg-hr{
+            background-color: #262223;
+        }
+        
+        
+        .container{
+            background-color: white;
+            border-radius: 10px;
+            color: #262223;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        }
+        
+        .nav-item{
+            margin-top:10px;
+            background-color: #DCF2BB;
+            color: #262223;
+            border-radius: 10px;
+               
+        }
+        
+        .nav-pills .nav-link.active, .nav-pills .show>.nav-link {        # aba ativa
+            color:  white ;
+            background-color:#80BF41;
+            border-radius: 10px;
+        }
+        
+        /* abas e formulario*/
+        #linkExibicao{
+            color:  #262223 ;
+            font-weight: bold;
+        }
+        #linkFormulario{
+            color:  #262223 ;
+            font-weight: bold;
+        }
+        
+        .form-control{
+            border-radius: 10px;
+            border: 1px solid #80BF41;
+        }
+        
+        textarea {
+            resize: none;
+            height:100% !important;      
+        }
+        
+        /* cards */
+        .card{
+            background-color:#DCF2BB;
+            color:#262223;
+            border-radius: 10px;
+        }
+        
+        /* para editar espaço da foto */
+        img.card-img-top{
+            border-radius: 10px;
+            height:180px;
+        }
+        
+        /* botão de foto */
+        #picture__input {
+            display: none;
+          }
+          
+          .picture {
+            height:100%;
+            width:100%;
+            background: white;
+            display: flex;
+            
+             
+            
+            color: #aaa;
+            border: 2px solid #80BF41;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: sans-serif;
+            transition: color 300ms ease-in-out, background 300ms ease-in-out;
+            outline: none;
+            overflow: hidden;
+          }
+          
+          .picture:hover {
+            color: #80BF41;
+            background: #ddd;
+          }
+          
+          .picture:active {
+            border-color: turquoise;
+            color: turquoise;
+            background: #eee;
+          }
+          
+          .picture:focus {
+            color: #777;
+            background: #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+          }
+          
+          .picture__img {
+            max-width: 100%;
+            
+          }
+
+          .picture__image{
+            display: block;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+          }
+          
+
+        
+    </style>
+    <script>
+
+// Seleciona todas as abas
+const tabs = document.querySelectorAll('.nav-link');
+
+// Adiciona um evento de clique para cada aba
+tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        // Remove a classe 'active' de todas as abas
+        tabs.forEach(t => t.classList.remove('active'));
+        // Adiciona a classe 'active' à aba clicada
+        tab.classList.add('active');
+        // Obtém o ID da aba clicada
+        const tabId = tab.getAttribute('href').slice(1);
+        // Oculta todos os conteúdos de abas
+        document.querySelectorAll('.tab-pane').forEach(tabContent => {
+            tabContent.classList.remove('show', 'active');
+        });
+        // Exibe o conteúdo da aba correspondente
+        document.getElementById(tabId).classList.add('show', 'active');
+    });
+});
+
+        
+window.onload = function() {
+    // Carrega os valores dos filtros se estiverem armazenados
+    document.getElementById("nomeInput").value = localStorage.getItem("nomeFiltro") || "";
+    document.getElementById("dataAdmissaoInput").value = localStorage.getItem("dataAdmissaoFiltro") || "";
+    document.getElementById("sexoInput").value = localStorage.getItem("sexoFiltro") || "";
+    document.getElementById("planoSaudeInput").value = localStorage.getItem("planoSaudeFiltro") || "";
+    document.getElementById("setorInput").value = localStorage.getItem("setorFiltro") || "";
+};
+
+function filtrar(event) {
+    event.preventDefault(); // Previne o comportamento padrão do formulário
+    // Opcional: rolar até o topo da página para que o usuário saiba que algo aconteceu
+    window.scrollTo(0, 0);    
+    
+    // Armazena os valores dos filtros
+    localStorage.setItem("nomeFiltro", document.getElementById("nomeInput").value);
+    localStorage.setItem("dataAdmissaoFiltro", document.getElementById("dataAdmissaoInput").value);
+    localStorage.setItem("sexoFiltro", document.getElementById("sexoInput").value);
+    localStorage.setItem("planoSaudeFiltro", document.getElementById("planoSaudeInput").value);
+    localStorage.setItem("setorFiltro", document.getElementById("setorInput").value);
+
+    // Submeta o formulário de filtro
+    // Aqui você pode enviar os dados do filtro para o backend
+    document.getElementById('form-filtros').submit(); // Submete o formulário
+};
+
+    
+    // Função para limpar os campos de entrada
+    function limparCampos() {
+        document.getElementById('form-filtros').reset(); // Substitua 'form-filtros' pelo ID do seu formulário de filtros
+    };
+
+    //Preview da imagem
+    const inputFile = document.querySelector("#picture__input");
+    const pictureImage = document.querySelector(".picture__image");
+    const pictureImageTxt = "Foto ";
+    pictureImage.innerHTML = pictureImageTxt;
+
+    inputFile.addEventListener("change", function (e) {
+        const inputTarget = e.target;
+        const file = inputTarget.files[0];
+        if (file) {
+            const reader = new FileReader();
+        
+            reader.addEventListener("load", function (e) {
+              const readerTarget = e.target;
+        
+              const img = document.createElement("img");
+              img.src = readerTarget.result;
+              img.classList.add("picture__img");
+        
+              pictureImage.innerHTML = "";
+              pictureImage.appendChild(img);
+            });
+        
+            reader.readAsDataURL(file);
+            } else {
+            pictureImage.innerHTML = pictureImageTxt;
+          }
+        });
+    </script>
+
+{% endblock %}
