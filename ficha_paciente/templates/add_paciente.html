@@ -3,7 +3,7 @@
 {%load static %}
 
 {% block 'dashboard' %}
-
+<br>
 <div class = "container">
 <div class="container-fluid">
     {% if messages %}
@@ -239,7 +239,7 @@
                         </div>                
                     </form>
 
-                    <!--Cars Dos Pacientes-->
+                    <!--Cards Dos Pacientes-->
                     <div class="listar_idosos">
                         <br>
                         <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -253,8 +253,9 @@
                                         {%endif%}
                                         <div class="card-body">
                                             <h6 class="card-title">{{idoso.nome_idoso}}</h6>
-                                            <p class="card-text"><small class="text-muted">Ultima atualização realizada na data 00-99-00 pelo usuário *testeusuaruio*</small></p>
-                                            <a href="{%url 'idoso' idoso.slug %}" class="btn btn-success">Ver</a>
+                                            <!--<p class="card-text"><small class="text-muted">Ultima atualização realizada na data 00-99-00 pelo usuário *testeusuaruio*</small></p>-->
+                                            <a href="{%url 'idoso' idoso.slug %}" class="bx bxs-show btn btn-success" alt="vizualizar idoso"></a>
+                                            <a href="{% url 'excluir_idoso' idoso.slug %}" class="bx bx-trash btn btn-danger" alt="excluir idoso" ></a>
                                         </div>
                                     </div>
                                     </div>
@@ -527,5 +528,7 @@ function filtrar(event) {
             pictureImage.innerHTML = pictureImageTxt;
           }
         });
+    
+
     </script>
 {%endblock%}

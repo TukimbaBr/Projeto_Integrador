@@ -12,11 +12,16 @@ from django.urls import reverse
 from django.contrib import messages
 from rolepermissions.decorators import has_permission_decorator
 from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404
+import os
+from django.conf import settings
+
+
 
 @has_permission_decorator('cadastrar_paciente')
 def add_paciente(request):
     tab_exibicao = True
-    idosos = Idoso.objects.all()
+    idosos = Idoso.objects.all().order_by('nome_idoso')
 
     if request.method == "GET":
         nome = request.GET.get('nome')
@@ -137,43 +142,51 @@ def add_paciente(request):
 
 def idoso(request, slug):
     idoso = Idoso.objects.get(slug=slug)
-    
-    # Obtendo a foto associada ao idoso
     foto = Foto.objects.filter(idoso=idoso).first()
     
     if request.method == "POST":
-        form = IdosoForm(request.POST, instance=idoso)
-        form_ft = FotoForm(request.POST, request.FILES, instance=foto)
-        if form.is_valid() and form_ft.is_valid():
-            form.save()
-            
-            # Aplicando manipulações na imagem antes de salvar
-            if 'foto' in request.FILES:  # Verifica se uma nova imagem foi enviada
-                f = request.FILES['foto']
-                name = f'{date.today()}_{idoso.id_idoso}_{idoso.nome_idoso}.jpg'
-                img = Image.open(f)
-                img = img.convert('RGB')
-                img = img.resize((160,160))
-                draw = ImageDraw.Draw(img)
-                draw.text((20,280), f"Lar Acolhedor Sào Vicente de São Paulo {date.today()}", (255, 255, 0))
-                output = BytesIO()
-                img.save(output, format="JPEG", quality=100)
-                output.seek(0)
-                img_final = InMemoryUploadedFile(output, 'ImageField', name, 'image/jpeg', sys.getsizeof(output), None)
-                
-                # Atualizando a foto associada ao idoso
-                foto.foto = img_final
-                foto.save()
-                
-            form_ft.save()
-            messages.success(request, 'Detalhes do idoso atualizados com sucesso!')
-            return redirect(reverse('add_paciente'))
-    else:
-        form = IdosoForm(instance=idoso)
-        form_ft = FotoForm(instance=foto)
+        form_idoso = IdosoForm(request.POST, instance=idoso)
+        form_foto = FotoForm(request.POST, request.FILES, instance=foto)
         
-    return render(request, 'idosos.html', {'form': form, 'form_ft': form_ft, 'idoso': idoso})
+        if form_idoso.is_valid() and form_foto.is_valid():
+            form_idoso.save()
+            
+            if 'foto' in request.FILES:
+                form_foto.save()
+                
+            messages.success(request, 'Detalhes do idoso atualizados com sucesso!')
+            return redirect('editar_idoso', slug=idoso.slug)
+    else:
+        form_idoso = IdosoForm(instance=idoso)
+        form_foto = FotoForm(instance=foto)
+    
+    return render(request, 'idosos.html', {'form': form_idoso, 'form_ft': form_foto, 'idoso': idoso})
 
+
+import os
+from django.conf import settings
+
+@has_permission_decorator('cadastrar_funcionarios')
+def excluir_idoso(request, slug):
+    # Lógica para excluir um idoso
+    idoso = get_object_or_404(Idoso, slug=slug)
+    
+    # Excluindo as fotos associadas ao idoso
+    fotos = Foto.objects.filter(idoso=idoso)
+    for foto in fotos:
+        # Excluindo o arquivo de mídia físico
+        if foto.foto:
+            foto_path = os.path.join(settings.MEDIA_ROOT, str(foto.foto))
+            if os.path.exists(foto_path):
+                os.remove(foto_path)
+        # Excluindo o registro de foto do banco de dados
+        foto.delete()
+    
+    # Excluindo o idoso
+    idoso.delete()
+    
+    messages.success(request, 'Idoso e mídias relacionadas excluídos com sucesso!')
+    return redirect(reverse('add_paciente'))
 
 
 

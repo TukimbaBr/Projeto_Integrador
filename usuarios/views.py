@@ -36,8 +36,8 @@ def cadastrar_funcionarios(request):
                                             last_name=sobrenome,
                                             cargo="F")
 
-        #TODO: redirecionar com uma mensagem
-        return HttpResponse('Conta criada')
+        messages.add_message(request, messages.SUCCESS, 'Conta criada com sucesso')
+        return redirect(reverse('cadastrar_funcionarios'))
     
 def login(request):
     if request.method == "GET":

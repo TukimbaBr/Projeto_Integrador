@@ -47,7 +47,7 @@ class FotoForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if self.instance and self.instance.foto:
             self.fields['foto'].widget.attrs.update({'class': 'form-control', 'id': 'picture__input'})
-            self.fields['foto'].widget.attrs['src'] = self.instance.foto.url
+            
 
 
 

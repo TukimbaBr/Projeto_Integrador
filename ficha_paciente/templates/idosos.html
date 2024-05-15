@@ -15,30 +15,35 @@
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <h1>Idosos</h1>
 
 <div class="container">
-    <form id="myForm" method="POST" enctype="multipart/form-data">
+    
+    <form>
+        {% csrf_token %}
         {% csrf_token %}
         <br>
-        <div class="row">
-                        
-            <div class="col-md-12 text-right">
-                <button type="button" id="editButton" class="btn btn-primary" onclick="toggleEdit()">Editar</button>
-            </div>
-        </div>
         <div class="form-row">
             <div class=" form-group col-md-3">
                 <label>Foto:</label>
+            {% if form_ft.instance.foto %}
                 <label class="picture" for="picture__input" tabIndex="0">                    
                     <img class="picture__image" src="{{ form_ft.instance.foto.url }}" alt="Foto do Idoso">
                     <div style="display:none">
-                        {{form_ft}}
+                        {{ form_ft }}
                     </div>
                 </label>
+            {% else %}
+                
+                <label class="picture" for="picture__input" tabIndex="0">
+                    <span class="picture__image"></span>
+                </label>
+
+                <input class="form-control" type="file" name="fotos" id= "picture__input" multiple >
+                                  
+            {% endif %}
                 
             </div>
             <div class="form-group col-md-9" >
@@ -178,119 +183,11 @@
             </div>
         </div>
         
-        <!-- Botão de enviar -->
-        <input class="btn btn-success" type="submit" value="Salvar">
+
         
     </form>
 </div>
 
-<script>
-    window.addEventListener("load", function() {
-        lockFields(); // Chama a função para travar os campos assim que a página é carregada
-        loadFilterValues(); // Carrega os valores dos filtros se estiverem armazenados
-    });
-
-    // Função para travar os campos por padrão
-    function lockFields() {
-        var form = document.getElementById("myForm");
-        var inputs = form.querySelectorAll("input, select, textarea");
-    
-        // Travando inputs de texto, select boxes, textareas e input file
-        inputs.forEach(function(input) {
-            // Verifica o tipo de elemento
-            var inputType = input.tagName.toLowerCase();
-            if (inputType === "input") {
-                var inputFieldType = input.getAttribute("type");
-                if (inputFieldType === "text" || inputFieldType === "file") {
-                    input.setAttribute("readonly", true);
-                }
-            } else if (inputType === "select" || inputType === "textarea") {
-                input.setAttribute("readonly", true);
-            }
-        });
-    }
-    
-
-    // Função para carregar os valores dos filtros
-    function loadFilterValues() {
-        document.getElementById("nomeInput").value = localStorage.getItem("nomeFiltro") || "";
-        document.getElementById("dataAdmissaoInput").value = localStorage.getItem("dataAdmissaoFiltro") || "";
-        document.getElementById("sexoInput").value = localStorage.getItem("sexoFiltro") || "";
-        document.getElementById("planoSaudeInput").value = localStorage.getItem("planoSaudeFiltro") || "";
-        document.getElementById("setorInput").value = localStorage.getItem("setorFiltro") || "";
-    }
-
-    // Função para alternar entre os modos de edição e cancelamento
-    function toggleEdit() {
-        var editButton = document.getElementById("editButton");
-        if (editButton.innerText === "Editar") {
-            // Se o texto do botão for "Editar", mudar para "Cancelar" e a cor para vermelho
-            editButton.innerText = "Cancelar";
-            editButton.classList.remove("btn-primary");
-            editButton.classList.add("btn-danger");
-        } else {
-            // Se o texto do botão for "Cancelar", mudar para "Editar" e a cor para azul
-            editButton.innerText = "Editar";
-            editButton.classList.remove("btn-danger");
-            editButton.classList.add("btn-primary");
-        }
-    }
-
-    // Função para verificar a senha antes de permitir a edição
-    function verificarSenha() {
-        var senhaCorreta = gerarSenha(); // Obter a senha correta do dia
-        var senhaInserida = prompt("Por favor, insira a senha para editar o documento:");
-
-        if (senhaInserida === senhaCorreta) {
-            // Senha correta, permitir edição dos campos
-            var form = document.getElementById("myForm");
-            var fields = form.getElementsByTagName("input");
-            for (var i = 0; i < fields.length; i++) {
-                fields[i].removeAttribute("readonly");
-            }
-            // Remover o atributo readonly dos textareas
-            var textAreas = form.getElementsByTagName("textarea");
-            for (var j = 0; j < textAreas.length; j++) {
-                textAreas[j].removeAttribute("readonly");
-            }
-            // Remover o atributo disabled dos input file
-            var fileInputs = form.querySelectorAll("input[type='file']");
-            for (var k = 0; k < fileInputs.length; k++) {
-                fileInputs[k].removeAttribute("disabled");
-            }
-            document.getElementById("editButton").disabled = true;
-        } else {
-            // Senha incorreta, exibir mensagem de erro
-            alert("Senha incorreta! Por favor, tente novamente.");
-        }
-    }
-
-    // Função para gerar a senha do dia
-    function gerarSenha() {
-        var dataAtual = new Date();
-        var dia = dataAtual.getDate().toString().padStart(2, '0'); // Obter o dia com 2 dígitos
-        var mes = (dataAtual.getMonth() + 1).toString().padStart(2, '0'); // Obter o mês com 2 dígitos
-        return "lasp" + dia + mes;
-    }
-
-    // Adicione um evento de clique ao botão de edição
-    document.getElementById("editButton").addEventListener("click", function() {
-        var confirmEdit = confirm("Você está prestes a editar este documento. Deseja continuar?");
-        if (confirmEdit) {
-            verificarSenha(); // Verificar a senha antes de permitir a edição
-        }
-    });
-
-    document.getElementById("saveButton").addEventListener("click", function(event) {
-        event.preventDefault();
-        var confirmSubmit = confirm("Tem certeza que deseja enviar os dados?");
-        if (confirmSubmit) {
-            document.getElementById("myForm").submit();
-        } else {
-            return false;
-        }
-    });
-</script>
 
 <style>
         
@@ -369,14 +266,13 @@
             display: none;
           }
           
-          .picture {
+        .picture {
             height:100%;
             width:100%;
             background: white;
             display: flex;
-            
-             
-            
+            align-items: center;
+            justify-content: center;                       
             color: #aaa;
             border: 2px solid #80BF41;
             border-radius: 10px;
@@ -385,36 +281,37 @@
             transition: color 300ms ease-in-out, background 300ms ease-in-out;
             outline: none;
             overflow: hidden;
-          }
+        }
           
-          .picture:hover {
+        .picture:hover {
             color: #80BF41;
             background: #ddd;
           }
           
-          .picture:active {
+        .picture:active {
             border-color: turquoise;
             color: turquoise;
             background: #eee;
-          }
+        }
           
-          .picture:focus {
+        .picture:focus {
             color: #777;
             background: #ccc;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-          }
+        }
           
-          .picture__img {
+        .picture__img {
             max-width: 100%;
             
-          }
+        }
 
-          .picture__image{
-            display: block;
+        .picture__image{
+            
+            display: flex;
             width: 100%;
             height: 100%;
             overflow: hidden;
-          }
+        }
           
 
         
@@ -478,7 +375,7 @@ function filtrar(event) {
     //Preview da imagem
     const inputFile = document.querySelector("#picture__input");
     const pictureImage = document.querySelector(".picture__image");
-    const pictureImageTxt = "Foto ";
+    const pictureImageTxt = "Adicione uma foto";
     pictureImage.innerHTML = pictureImageTxt;
 
     inputFile.addEventListener("change", function (e) {

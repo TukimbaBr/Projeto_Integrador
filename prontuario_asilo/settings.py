@@ -152,3 +152,6 @@ MESSAGE_TAGS = {
     constants.INFO: 'alert-info',
     constants.WARNING: 'alert-warning'
 }
+
+# Configurações de redirecionamento após o login
+LOGIN_REDIRECT_URL = '/ficha_paciente/usuarios/login/'
