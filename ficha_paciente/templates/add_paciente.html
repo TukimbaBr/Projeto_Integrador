@@ -45,7 +45,7 @@
                             </div>
                             <div class="form-group col-md-9"> 
                                 <label>História Pregressa:</label>
-                                <textarea class="form-control" name="historia_pregressa_idoso" ></textarea>
+                                <textarea class="form-control" name="historia_pregressa_idoso" maxlenght="1000"></textarea>
                             </div>
                         </div>
                         <br>
@@ -53,18 +53,18 @@
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <label>Nome:</label>
-                                <input class="form-control" type="text" name="nome">
+                                <input class="form-control" type="text" name="nome" pattern="[A-Za-zÀ-ÿ\s]+" title="Por favor, use apenas letras." required maxlength="255">
                             </div>
                         </div>
                         
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label>CPF:</label>
-                                <input class="form-control" type="text" name="cpf">
+                                <input class="form-control" type="number" name="cpf" pattern="\d{11}" title="Por favor, insira um CPF válido com 11 dígitos." required maxlength="11">
                             </div>
                             <div class="form-group col-md-6">
                                 <label>RG:</label>
-                                <input class="form-control" type="text" name="rg">
+                                <input class="form-control" type="text" name="rg"  pattern="\d{2}\.\d{3}\.\d{3}-\d{x}" title="Por favor, insira um RG válido no formato 00.000.000-X." required>
                             </div>
                         </div>
         
@@ -72,18 +72,26 @@
                             <div class="form-group col-md-2">
                                 <label>Sexo:</label>
                                 <select class="form-control" name="sexo">
-                                    <option value="Masculino">Masculino</option>
-                                    <option value="Feminino">Feminino</option>
+                                    {% for i in sexo_choices %}
+                                        <option value="{{ i }}">{{ i }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="form-group col-md-2">
                                 <label>Estado Civil:</label>
-                                <input class="form-control" type="text" name="estado_civil">
+                                <select class="form-control" name="estado_civil">
+                                    {% for i in estado_civil_choices %}
+                                        <option value="{{ i }}">{{ i }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Setor:</label>
-                                <input class="form-control" type="text" name="setor">
-                            </div>
+                                <select class="form-control" name="setor">
+                                    {% for i in setor_choices %}
+                                        <option value="{{ i }}">{{ i }}</option>
+                                    {% endfor %}
+                                </select>
                             <div class="form-group col-md-4">
                                 <label>Vínculo:</label>
                                 <input class="form-control" type="text" name="vinculo">
@@ -101,7 +109,11 @@
                             </div>
                             <div class="form-group col-md-3">
                                 <label>Raça:</label>
-                                <input class="form-control" type="text" name="raca">
+                                <select class="form-control" name="raca">
+                                    {% for i in raca_choices %}
+                                        <option value="{{ i }}">{{ i }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             <div class="form-group col-md-5">
                                 <label>Religião:</label>

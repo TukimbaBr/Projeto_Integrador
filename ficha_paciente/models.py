@@ -31,25 +31,34 @@ estado_choices = [
     ("TO", "Tocantins")
 ]
 
+sexo_choices = ("Masculino", "Feminino")
+
+estado_civil_choices = ("Solteiro(a)", "Casado(a)", "Divorciado(a)", "Viúvo(a)", "Separado(a)")
+
+raca_choices = ("Preto(a)", "Pardo(a)", "Branco(a)", "Indígena(a)", "Amarelo(a)")
+
+setor_choices = ("São Carlos", "São Vicente", "Central")
+
+
 class Idoso(models.Model):
     id_idoso = models.AutoField(primary_key=True, unique=True)
     nome_idoso = models.CharField(max_length=100)
     naturalidade_idoso = models.CharField(max_length=100, blank=True, null=True)
-    sexo_idoso = models.CharField(max_length=10)
-    setor_idoso = models.CharField(max_length=55, blank=True, null=True)
+    sexo_idoso = models.CharField(choices=sexo_choices)
+    setor_idoso = models.CharField(choices= setor_choices)
     data_nasc_idoso = models.DateField()
     data_adimissao_idoso = models.DateField()
     cpf_idoso = models.CharField(max_length=11, unique=True)
     rg_idoso = models.CharField(max_length=10, unique=True)
     estado_civil_idoso = models.CharField(max_length=20)
     religiao_idoso = models.CharField(max_length=50, blank=True, null=True)
-    raca_idoso = models.CharField(max_length=50, blank=True, null=True)
+    raca_idoso = models.CharField(choices=raca_choices, blank=True)
     plano_saude_idoso = models.CharField(max_length=100)
     cartao_sus_idoso = models.CharField(max_length=50, unique=True)
     profissao_idoso = models.CharField(max_length=100, blank=True, null=True)
-    vinculo_idoso = models.CharField(max_length=100, blank=True, null=True)
+    vinculo_idoso = models.BooleanField(default=False, help_text="O idoso possui vínculo familiar ou social?")
 
-    estado_idoso = models.CharField(max_length=2, choices=estado_choices,)
+    estado_idoso = models.CharField(choices=estado_choices)
     cidade_idoso = models.CharField(max_length=55, )
     cep_endereco_idoso = models.CharField(max_length=8, blank=True, null = True)
     rua_endereco_idoso = models.CharField(max_length=255, blank=True, null = True)

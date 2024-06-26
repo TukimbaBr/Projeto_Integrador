@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .forms import IdosoForm, FotoForm
-from .models import  estado_choices, Idoso, Foto
+from .models import  estado_choices, estado_civil_choices, raca_choices, setor_choices, sexo_choices, Idoso, Foto
 from django.http import HttpResponse
 from PIL import Image, ImageDraw
 from datetime import date
@@ -54,7 +54,13 @@ def add_paciente(request):
         page_num = request.GET.get('page')
         page_obj = add_paciente_paginator.get_page(page_num)
         
-        return render(request, 'add_paciente.html', {'estado_choices': estado_choices, 'tab_exibicao': tab_exibicao, 'page_obj': page_obj})
+        return render(request, 'add_paciente.html', {'estado_choices': estado_choices,
+                                                    'estado_civil_choices': estado_civil_choices,
+                                                    'raca_choices': raca_choices,
+                                                    'setor_choices': setor_choices,
+                                                    'sexo_choices': sexo_choices,
+                                                    'tab_exibicao': tab_exibicao,
+                                                    'page_obj': page_obj})
     
     elif request.method == "POST":
         nome = request.POST.get('nome')
